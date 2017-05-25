@@ -104,6 +104,8 @@ open class LineChartRenderer: LineRadarRenderer
         
         // the path for the cubic-spline
         let cubicPath = CGMutablePath()
+
+        let verticalPath = CGMutablePath()
         
         let valueToPixelMatrix = trans.valueToPixelMatrix
         
@@ -148,18 +150,50 @@ open class LineChartRenderer: LineRadarRenderer
                 prevDy = CGFloat(cur.y - prevPrev.y) * intensity
                 curDx = CGFloat(next.x - prev.x) * intensity
                 curDy = CGFloat(next.y - prev.y) * intensity
-                
-                cubicPath.addCurve(
-                    to: CGPoint(
+
+                if prev.x == cur.x {
+
+                    verticalPath.move(to: CGPoint(
                         x: CGFloat(cur.x),
-                        y: CGFloat(cur.y) * CGFloat(phaseY)),
-                    control1: CGPoint(
-                        x: CGFloat(prev.x) + prevDx,
-                        y: (CGFloat(prev.y) + prevDy) * CGFloat(phaseY)),
-                    control2: CGPoint(
-                        x: CGFloat(cur.x) - curDx,
-                        y: (CGFloat(cur.y) - curDy) * CGFloat(phaseY)),
-                    transform: valueToPixelMatrix)
+                        y: CGFloat(0) * CGFloat(phaseY)), transform: valueToPixelMatrix)
+
+                    verticalPath.addLine(to: CGPoint(
+                        x: CGFloat(cur.x),
+                        y: CGFloat(200) * CGFloat(phaseY)).applying(valueToPixelMatrix))
+
+                    cubicPath.addLine(to: CGPoint(
+                        x: CGFloat(cur.x),
+                        y: CGFloat(0) * CGFloat(phaseY)).applying(valueToPixelMatrix))
+
+                    cubicPath.addLine(to: CGPoint(
+                        x: CGFloat(cur.x),
+                        y: CGFloat(cur.y) * CGFloat(phaseY)).applying(valueToPixelMatrix))
+
+                    let point = CGPoint(
+                        x: CGFloat(cur.x),
+                        y: CGFloat(cur.y) * CGFloat(phaseY)).applying(valueToPixelMatrix)
+
+                    let rect = CGRect(x: point.x + 2, y: 420, width: 100, height: 30)
+
+                    if let label = cur.data as? NSString {
+                        print(label)
+                        label.draw(in: rect, withAttributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12), NSForegroundColorAttributeName: UIColor.white])
+                    }
+
+                } else {
+
+                    cubicPath.addCurve(
+                        to: CGPoint(
+                            x: CGFloat(cur.x),
+                            y: CGFloat(cur.y) * CGFloat(phaseY)),
+                        control1: CGPoint(
+                            x: CGFloat(prev.x) + prevDx,
+                            y: (CGFloat(prev.y) + prevDy) * CGFloat(phaseY)),
+                        control2: CGPoint(
+                            x: CGFloat(cur.x) - curDx,
+                            y: (CGFloat(cur.y) - curDy) * CGFloat(phaseY)),
+                        transform: valueToPixelMatrix)
+                }
             }
         }
         
@@ -176,6 +210,13 @@ open class LineChartRenderer: LineRadarRenderer
         context.beginPath()
         context.addPath(cubicPath)
         context.setStrokeColor(drawingColor.cgColor)
+        context.setLineWidth(2)
+        context.strokePath()
+
+        context.beginPath()
+        context.addPath(verticalPath)
+        context.setStrokeColor(UIColor(red:0.12, green:0.14, blue:0.21, alpha:1.00).cgColor)
+        context.setLineWidth(2.5)
         context.strokePath()
         
         context.restoreGState()
