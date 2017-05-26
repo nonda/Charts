@@ -315,9 +315,31 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
                 context.setFillColor(dataSet.color(atIndex: j).cgColor)
             }
-            
-            context.fill(barRect)
-            
+
+            // Lex: Draw gradient
+            context.saveGState()
+
+            let roundedPath = UIBezierPath(roundedRect: barRect, cornerRadius: barRect.width / 2.0)
+            context.addPath(roundedPath.cgPath)
+            context.clip()
+
+            let locations: [CGFloat] = [1.0, 0.5, 0.0]
+            let components: [CGFloat] = [
+                1.0, 0.0, 0.0, 1.0,
+                0.0, 0.99, 0.71, 1.0,
+                0.05, 0.31, 0.38, 1.0
+            ]
+            let myColorSpace = CGColorSpaceCreateDeviceRGB()
+            let myGradient = CGGradient(colorSpace: myColorSpace, colorComponents: components,
+                                        locations: locations, count: locations.count)
+
+            let myStartPoint = CGPoint(x: barRect.midX, y: 300) // buffer.rects.map({ $0.height }).max()!
+            let myEndPoint = CGPoint(x: barRect.midX, y: 0)
+            context.drawLinearGradient(myGradient!, start: myStartPoint,
+                                         end: myEndPoint, options: CGGradientDrawingOptions.drawsAfterEndLocation)
+
+            context.restoreGState()
+
             if drawBorder
             {
                 context.setStrokeColor(borderColor.cgColor)
@@ -684,7 +706,10 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: barData.barWidth / 2.0, trans: trans, rect: &barRect)
                 
                 setHighlightDrawPos(highlight: high, barRect: barRect)
-                
+
+                let roundedPath = UIBezierPath(roundedRect: barRect, cornerRadius: barRect.width / 2.0)
+                context.addPath(roundedPath.cgPath)
+                context.clip()
                 context.fill(barRect)
             }
         }
