@@ -319,24 +319,32 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             // Lex: Draw gradient
             context.saveGState()
 
-            let roundedPath = UIBezierPath(roundedRect: barRect, cornerRadius: barRect.width / 2.0)
-            context.addPath(roundedPath.cgPath)
-            context.clip()
+            if dataSet.isBarRoundRect {
+                let roundedPath = UIBezierPath(roundedRect: barRect, cornerRadius: barRect.width / 2.0)
+                context.addPath(roundedPath.cgPath)
+                context.clip()
 
-            let locations: [CGFloat] = [1.0, 0.5, 0.0]
-            let components: [CGFloat] = [
-                1.0, 0.0, 0.0, 1.0,
-                0.0, 0.99, 0.71, 1.0,
-                0.05, 0.31, 0.38, 1.0
-            ]
-            let myColorSpace = CGColorSpaceCreateDeviceRGB()
-            let myGradient = CGGradient(colorSpace: myColorSpace, colorComponents: components,
-                                        locations: locations, count: locations.count)
+            } else {
+                let rectPath = UIBezierPath(rect: barRect)
+                context.addPath(rectPath.cgPath)
+                context.clip()
 
-            let myStartPoint = CGPoint(x: barRect.midX, y: 300) // buffer.rects.map({ $0.height }).max()!
-            let myEndPoint = CGPoint(x: barRect.midX, y: 0)
-            context.drawLinearGradient(myGradient!, start: myStartPoint,
-                                         end: myEndPoint, options: CGGradientDrawingOptions.drawsAfterEndLocation)
+            }
+
+            if dataSet.gradientColors.count > 0 && dataSet.gradientLocations.count == dataSet.gradientColors.count {
+
+                let colors = dataSet.gradientColors.map({ $0.cgColor }) as CFArray
+                let locations = dataSet.gradientLocations
+
+                let myColorSpace = CGColorSpaceCreateDeviceRGB()
+
+                let myGradient = CGGradient(colorsSpace: myColorSpace, colors: colors, locations: locations)
+
+                let myStartPoint = CGPoint(x: barRect.midX, y: barRect.origin.y + barRect.height) // buffer.rects.map({ $0.height }).max()!
+                let myEndPoint = CGPoint(x: barRect.midX, y: buffer.rects.map({ $0.origin.y }).min() ?? 0)
+                context.drawLinearGradient(myGradient!, start: myStartPoint,
+                                           end: myEndPoint, options: CGGradientDrawingOptions.drawsAfterEndLocation)
+            }
 
             context.restoreGState()
 

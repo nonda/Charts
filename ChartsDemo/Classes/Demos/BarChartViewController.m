@@ -157,6 +157,11 @@
         set1 = [[BarChartDataSet alloc] initWithValues:yVals label:@"The year 2017"];
         [set1 setColors:ChartColorTemplates.material];
         set1.drawIconsEnabled = NO;
+
+        set1.gradientLocations = @[@1.0, @0.0];
+        set1.gradientColors = @[[UIColor colorWithRed:0.00 green:0.99 blue:0.74 alpha:1.00], [UIColor colorWithRed:0.05 green:0.31 blue:0.38 alpha:1.00]];
+
+        set1.isBarRoundRect = YES;
         
         NSMutableArray *dataSets = [[NSMutableArray alloc] init];
         [dataSets addObject:set1];
@@ -165,6 +170,7 @@
         [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:10.f]];
         
         data.barWidth = 0.9f;
+
         
         _chartView.data = data;
     }
