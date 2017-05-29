@@ -178,7 +178,6 @@ open class LineChartRenderer: LineRadarRenderer
                     let rect = CGRect(x: point.x + 2, y: labelPositionY - 30, width: 100, height: 30)
 
                     if let label = cur.data as? NSString {
-                        print(rect)
                         label.draw(in: rect, withAttributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12), NSForegroundColorAttributeName: UIColor.white])
                     }
 
