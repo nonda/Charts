@@ -155,11 +155,11 @@ open class LineChartRenderer: LineRadarRenderer
 
                     verticalPath.move(to: CGPoint(
                         x: CGFloat(cur.x),
-                        y: CGFloat(0) * CGFloat(phaseY)), transform: valueToPixelMatrix)
+                        y: CGFloat(cur.y - 200) * CGFloat(phaseY)), transform: valueToPixelMatrix)
 
                     verticalPath.addLine(to: CGPoint(
                         x: CGFloat(cur.x),
-                        y: CGFloat(200) * CGFloat(phaseY)).applying(valueToPixelMatrix))
+                        y: CGFloat(cur.y + 200) * CGFloat(phaseY)).applying(valueToPixelMatrix))
 
                     cubicPath.addLine(to: CGPoint(
                         x: CGFloat(cur.x),
