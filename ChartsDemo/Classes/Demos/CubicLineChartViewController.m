@@ -167,7 +167,7 @@
     
     for (int i = 0; i < 100; i++)
     {
-        double mult = 50;
+        double mult = 500;
         double val = (double) (arc4random_uniform(mult)) + 20;
         [yVals1 addObject:[[ChartDataEntry alloc] initWithX:i y:val]];
 

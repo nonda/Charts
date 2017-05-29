@@ -25,4 +25,12 @@ open class LineChartView: BarLineChartViewBase, LineChartDataProvider
     // MARK: - LineChartDataProvider
     
     open var lineData: LineChartData? { return _data as? LineChartData }
+
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if let renderer = renderer as? LineChartRenderer {
+            renderer.labelPositionY = bounds.height
+        }
+    }
 }

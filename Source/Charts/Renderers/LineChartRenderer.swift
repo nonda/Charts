@@ -20,6 +20,8 @@ import CoreGraphics
 open class LineChartRenderer: LineRadarRenderer
 {
     open weak var dataProvider: LineChartDataProvider?
+
+    open var labelPositionY : CGFloat = 0
     
     public init(dataProvider: LineChartDataProvider?, animator: Animator?, viewPortHandler: ViewPortHandler?)
     {
@@ -173,10 +175,10 @@ open class LineChartRenderer: LineRadarRenderer
                         x: CGFloat(cur.x),
                         y: CGFloat(cur.y) * CGFloat(phaseY)).applying(valueToPixelMatrix)
 
-                    let rect = CGRect(x: point.x + 2, y: 420, width: 100, height: 30)
+                    let rect = CGRect(x: point.x + 2, y: labelPositionY - 30, width: 100, height: 30)
 
                     if let label = cur.data as? NSString {
-                        print(label)
+                        print(rect)
                         label.draw(in: rect, withAttributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12), NSForegroundColorAttributeName: UIColor.white])
                     }
 
