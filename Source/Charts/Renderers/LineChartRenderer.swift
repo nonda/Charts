@@ -155,31 +155,31 @@ open class LineChartRenderer: LineRadarRenderer
 
                 if prev.x == cur.x {
 
-                    verticalPath.move(to: CGPoint(
-                        x: CGFloat(cur.x),
-                        y: CGFloat(cur.y - 200) * CGFloat(phaseY)), transform: valueToPixelMatrix)
-
-                    verticalPath.addLine(to: CGPoint(
-                        x: CGFloat(cur.x),
-                        y: CGFloat(cur.y + 200) * CGFloat(phaseY)).applying(valueToPixelMatrix))
+//                    verticalPath.move(to: CGPoint(
+//                        x: CGFloat(cur.x),
+//                        y: CGFloat(cur.y - 200) * CGFloat(phaseY)), transform: valueToPixelMatrix)
+//
+//                    verticalPath.addLine(to: CGPoint(
+//                        x: CGFloat(cur.x),
+//                        y: CGFloat(cur.y + 200) * CGFloat(phaseY)).applying(valueToPixelMatrix))
 
                     cubicPath.addLine(to: CGPoint(
                         x: CGFloat(cur.x),
-                        y: CGFloat(0) * CGFloat(phaseY)).applying(valueToPixelMatrix))
+                        y: CGFloat(prev.y) * CGFloat(phaseY)).applying(valueToPixelMatrix))
 
                     cubicPath.addLine(to: CGPoint(
                         x: CGFloat(cur.x),
                         y: CGFloat(cur.y) * CGFloat(phaseY)).applying(valueToPixelMatrix))
 
-                    let point = CGPoint(
-                        x: CGFloat(cur.x),
-                        y: CGFloat(cur.y) * CGFloat(phaseY)).applying(valueToPixelMatrix)
-
-                    let rect = CGRect(x: point.x + 2, y: labelPositionY - 30, width: 100, height: 30)
-
-                    if let label = cur.data as? NSString {
-                        label.draw(in: rect, withAttributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12), NSForegroundColorAttributeName: UIColor.white])
-                    }
+//                    let point = CGPoint(
+//                        x: CGFloat(cur.x),
+//                        y: CGFloat(cur.y) * CGFloat(phaseY)).applying(valueToPixelMatrix)
+//
+//                    let rect = CGRect(x: point.x + 2, y: labelPositionY - 30, width: 100, height: 30)
+//
+//                    if let label = cur.data as? NSString {
+//                        label.draw(in: rect, withAttributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12), NSForegroundColorAttributeName: UIColor.white])
+//                    }
 
                 } else {
 
@@ -214,12 +214,12 @@ open class LineChartRenderer: LineRadarRenderer
         context.setLineWidth(2)
         context.strokePath()
 
-        context.beginPath()
-        context.addPath(verticalPath)
-        context.setStrokeColor(UIColor(red:0.12, green:0.14, blue:0.21, alpha:1.00).cgColor)
-        context.setLineWidth(2.5)
-        context.strokePath()
-        
+//        context.beginPath()
+//        context.addPath(verticalPath)
+//        context.setStrokeColor(UIColor(red:0.12, green:0.14, blue:0.21, alpha:1.00).cgColor)
+//        context.setLineWidth(2.5)
+//        context.strokePath()
+
         context.restoreGState()
     }
     
